@@ -1,5 +1,5 @@
 let assert = require("assert");
-let SettingsBill = require("../settings_Bill");
+let SettingsBill = require("../settings-bill");
 let settingsBill = SettingsBill();
 describe('Settings bill with factory function', function () {
     it('should be able to record calls', function () {

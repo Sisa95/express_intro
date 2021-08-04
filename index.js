@@ -1,87 +1,68 @@
-let express = require('express');
+const express = require('express');
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
+const SettingsBill = require('./settings-bill');
 
-const SettingsBill = require("./settings_Bill.js")
+const app = express();
 
-let app = express();
+const settingsBill = SettingsBill();
 
-const settingsBill = SettingsBill()
+const handlebarSetup = exphbs({
+    partialsDir: "./views/partials",
+    viewPath:  './views',
+    layoutsDir : './views/layouts'
+});
 
-
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', handlebarSetup);
 app.set('view engine', 'handlebars');
 
 app.use(express.static('public'));
 
-app.use(bodyParser.urlencoded({extended: false}))
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
 
-
-app.get("/", function(req, res){
-  res.render("index",{
-      settings: settingsBill.getSettings()
-  });
+app.get('/', function(req,res){
+    
+    res.render('index', {
+        settings: settingsBill.getSettings(),
+        totals: settingsBill.totals(),
+        class: settingsBill.addClass
+    });
 });
 
 app.post('/settings', function(req, res){
+    // console.log(req.body);
+    settingsBill.setSettings({
+        callCost: req.body.callCost,
+        smsCost: req.body.smsCost,
+        warningLevel: req.body.warningLevel,
+        criticalLevel: req.body.criticalLevel
+    });
+   
+    console.log(settingsBill.getSettings());
 
-  settingsBill.setSettings({
-    callCost: req.body.callCost,
-    smsCost: req.body.smsCost,
-    warningLevel: req.body.warningLevel,
-    criticalLevel: req.body.criticalLevel,
-  })
-
-  res.redirect("/")
-
-})
+    res.redirect('/');
+});
 
 app.post('/action', function(req, res){
 
+    settingsBill.recordAction(req.body.actionType)
+    res.redirect('/');
+});
 
-  res.redirect("/")
+app.get('/actions', function(req, res){
+    res.render('actions', {actions: settingsBill.actions()});
+});
 
-})
+app.get('/actions/:actionType', function(req, res){
+    const actionType = req.params.actionType;
+    res.render('actions', {actions: settingsBill.actionsFor(actionType)});
+});
 
-app.get('actions/', function(req, res){
-  
-})
+const PORT = process.env.PORT || 3011;
 
-app.get('actions/:type', function(req, res){
-  
-})
-
-
-// app.get('/', function (req, res) {
-//   res.render('home');
-// });
-
-
- 
-
-// app.post('/settings', function(req, res){
-//   let smsCost = req.body.smsCost;
-//   let callCost = req.body.callCost;
-//   let warningLevel = req.body.warningLevel;
-//   let criticalLevel = req.body.criticalLevel;
-
-//   var settings = {
-//     smsCost,
-//     callCost,
-//     warningLevel,
-//     criticalLevel
-//   };
-
-//   // process data
-//   globalSetings = settings;
-
-//   // note that data can be sent to the template
-//   res.render('home', {settings})
-// });
-
-let PORT = process.env.PORT || 3007;
 app.listen(PORT, function(){
-  console.log('App starting on port', PORT);
+    console.log("App started at:", PORT)
 });

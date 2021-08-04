@@ -1,5 +1,7 @@
 module.exports = function SettingsBill() {
 
+    let moment = require('moment');
+
     let smsCost;
     let callCost;
     let warningLevel;
@@ -25,20 +27,22 @@ module.exports = function SettingsBill() {
     }
 
     function recordAction(action) {
-
         let cost = 0;
-        if (action === 'sms'){
+        if (action === 'sms' && !hasReachedCriticalLevel()){
             cost = smsCost;
         }
-        else if (action === 'call'){
+        else if (action === 'call' && !hasReachedCriticalLevel()){
             cost = callCost;
         }
 
+        if(action === 'sms' && cost >= 0 || action === 'call' && cost >= 0){
         actionList.push({
             type: action,
             cost,
-            timestamp: new Date()
+            // timestamp: today.format()
+            timestamp: moment(new Date()).fromNow()
         });
+    }
     }
 
     function actions(){
@@ -76,12 +80,6 @@ module.exports = function SettingsBill() {
         }
         return total;
 
-        // the short way using reduce and arrow functions
-
-        // return actionList.reduce((total, action) => { 
-        //     let val = action.type === type ? action.cost : 0;
-        //     return total + val;
-        // }, 0);
     }
 
     function grandTotal() {
@@ -89,12 +87,13 @@ module.exports = function SettingsBill() {
     }
 
     function totals() {
-        let smsTotal = getTotal('sms')
-        let callTotal = getTotal('call')
+
+        let smsTotal = getTotal('sms').toFixed(2)
+        let callTotal = getTotal('call').toFixed(2)
         return {
             smsTotal,
             callTotal,
-            grandTotal : grandTotal()
+            grandTotal : grandTotal().toFixed(2)
         }
     }
 
@@ -111,6 +110,17 @@ module.exports = function SettingsBill() {
         return total >= criticalLevel;
     }
 
+     function addClass(){
+        let className = "";
+
+        if(hasReachedWarningLevel()){
+            return className = "warning";
+        }
+
+        if(hasReachedCriticalLevel()){
+            return className = "danger";
+        }
+    }
 
     return {
         setSettings,
@@ -120,6 +130,7 @@ module.exports = function SettingsBill() {
         actionsFor,
         totals,
         hasReachedWarningLevel,
-        hasReachedCriticalLevel
+        hasReachedCriticalLevel,
+        addClass
     }
 }

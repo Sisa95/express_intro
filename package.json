@@ -1,13 +1,33 @@
 {
- "dependencies": {
-  "body-parser": "^1.19.0",
-  "express": "^4.17.1",
-  "express-handlebars": "^5.3.2"
- },
- "scripts": {
-  "test": "mocha"
- },
- "devDependencies": {
-  "mocha": "^9.0.3"
- }
-}
+    "name": "express_intro",
+    "version": "1.0.0",
+    "description": "",
+    "main": "settingsBill.js",
+    "directories": {
+      "test": "test"
+    },
+    "scripts": {
+      "test": "mocha"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Sisa95/express_intro.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Sisa95/express_intro/issues"
+    },
+    "homepage": "https://github.com/Sisa95/express_intro#readme",
+    "devDependencies": {
+      "mocha": "^9.0.3"
+    },
+    "dependencies": {
+      "body-parser": "^1.19.0",
+      "express": "^4.17.1",
+      "express-handlebars": "^5.3.2",
+      "moment": "^2.29.1"
+    }
+  }
+  
