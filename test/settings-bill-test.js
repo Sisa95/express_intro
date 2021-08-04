@@ -2,8 +2,15 @@ let assert = require("assert");
 let SettingsBill = require("../settings-bill");
 let settingsBill = SettingsBill();
 describe('Settings bill with factory function', function () {
-    it('should be able to record calls', function () {
+    it('should be able to record calls', function(){
+        settingsBill.setSettings({
+            smsCost: 2.35,
+            callCost: 3.35,
+            warningLevel: 30,
+            criticalLevel: 40
+        });
         settingsBill.recordAction('call');
+        
         assert.equal(1, settingsBill.actionsFor('call').length);
     });
 
