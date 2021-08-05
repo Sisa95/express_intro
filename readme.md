@@ -1,1 +1,1 @@
-https://travis-ci.com/Sisa95/express_intro.svg?branch=master
+[![Build Status](https://www.travis-ci.com/Sisa95/express_intro.svg?branch=master)](https://www.travis-ci.com/Sisa95/express_intro)
