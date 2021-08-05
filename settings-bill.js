@@ -1,6 +1,7 @@
 module.exports = function SettingsBill() {
 
-    let moment = require('moment');
+    var moment = require('moment'); // require
+    moment().format();
 
     let smsCost;
     let callCost;
@@ -36,11 +37,12 @@ module.exports = function SettingsBill() {
         }
 
         if(action === 'sms' && cost >= 0 || action === 'call' && cost >= 0){
+          
         actionList.push({
             type: action,
             cost,
-            // timestamp: today.format()
-            timestamp: moment(new Date()).fromNow()
+            // timestamp
+            timestamp: moment().format('llll')
         });
     }
     }
