@@ -1,7 +1,7 @@
 module.exports = function SettingsBill() {
 
-    var moment = require('moment'); // require
-    moment().format();
+    var moment = require('moment-timezone'); // require
+   
 
     let smsCost;
     let callCost;
@@ -42,7 +42,7 @@ module.exports = function SettingsBill() {
             type: action,
             cost,
             // timestamp
-            timestamp: moment().format('llll')
+            timestamp: moment().tz("Africa/Maseru").format('llll')
         });
     }
     }
