@@ -1,8 +1,9 @@
 const express = require('express');
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
+var moment = require('moment'); // require
+moment().format();
 const SettingsBill = require('./settings-bill');
-
 
 const app = express();
 
@@ -43,23 +44,33 @@ app.post('/settings', function(req, res){
     });
    
     console.log(settingsBill.getSettings());
-
     res.redirect('/');
 });
 
 app.post('/action', function(req, res){
-
+    
+    
     settingsBill.recordAction(req.body.actionType)
     res.redirect('/');
 });
 
 app.get('/actions', function(req, res){
-    res.render('actions', {actions: settingsBill.actions()});
+    let actionsList = settingsBill.actions();
+    actionsList.forEach(element => {
+        element.currentTime = moment(element.timestamp).fromNow()
+    });
+    res.render('actions', {actions: actionsList});
+
 });
 
 app.get('/actions/:actionType', function(req, res){
-    const actionType = req.params.actionType;
-    res.render('actions', {actions: settingsBill.actionsFor(actionType)});
+    
+    let actionType = req.params.actionType;
+    let actionsList = settingsBill.actionsFor(actionType);
+    actionsList.forEach(element => {
+        element.currentTime = moment(element.timestamp).fromNow()
+    });
+    res.render('actions', { actions: actionsList });
 });
 
 const PORT = process.env.PORT || 3011;

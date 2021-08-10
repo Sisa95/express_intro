@@ -1,8 +1,5 @@
 module.exports = function SettingsBill() {
-
-    var moment = require('moment-timezone'); // require
    
-
     let smsCost;
     let callCost;
     let warningLevel;
@@ -41,8 +38,7 @@ module.exports = function SettingsBill() {
         actionList.push({
             type: action,
             cost,
-            // timestamp
-            timestamp: moment().tz("Africa/Maseru").format('llll')
+            
         });
     }
     }
