@@ -33,13 +33,11 @@ module.exports = function SettingsBill() {
             cost = callCost;
         }
 
-        if(action === 'sms' && cost >= 0 || action === 'call' && cost >= 0){
-          
+        if(action !== undefined){
         actionList.push({
             type: action,
             cost,
-            timestamp: new Date()
-            
+            timestamp: new Date()  
         });
     }
     }
